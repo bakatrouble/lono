@@ -6,7 +6,7 @@ authors = ["bakatrouble <bakatrouble@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = ">=3.9,<4.0"
 aiogram = "^2.23.1"
 aioredis = "^2.0.1"
 click = "^8.1.3"
