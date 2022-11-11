@@ -35,7 +35,7 @@ def sign_text(m: Message):
             sign += f'\n\nПереслано от <a href="{build_link(m.forward_from)}">{m.forward_from.full_name}</a>'
     if len(text + sign) > (MAX_MESSAGE_LENGTH if m.text else 1024):
         text = text[:-(len(sign) + 1)]
-    text = text + ('🦝' if text else '') + sign
+    text = text + (' 🦝' if text else '') + sign
     return text
 
 
