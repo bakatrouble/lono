@@ -8,7 +8,7 @@ from typing import List, Dict, Any
 
 from aiogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, ParseMode, MediaGroup, \
     ContentType, ChatType
-from aiogram.utils.exceptions import Unauthorized
+from aiogram.utils.exceptions import Unauthorized, BadRequest
 from aiogram.utils.parts import MAX_MESSAGE_LENGTH
 
 from src.defines import MANAGEMENT_CHAT, bot, mq
@@ -134,6 +134,7 @@ async def process_message(m: Message):
         try:
             if reply_to_message_id:
                 kwargs['reply_to_message_id'] = reply_to_message_id
+                kwargs['allow_sending_without_reply'] = True
             m = await func(sub_id, *args, **kwargs)
 
             await save_sent_mid(sub_id, m.message_id)
@@ -143,6 +144,9 @@ async def process_message(m: Message):
             await remove_user(sub_id)
             await bot.send_message(MANAGEMENT_CHAT, f'<a href="{removed_link}">{removed_username}</a> был удален '
                                                     f'из-за блокировки бота', parse_mode=ParseMode.HTML)
+        except BadRequest as e:
+            logging.exception(e)
+
     await increase_counter()
 
 
