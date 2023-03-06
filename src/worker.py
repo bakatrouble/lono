@@ -31,7 +31,7 @@ def sign_text(m: Message):
         sign = f'\n\n<a href="{build_link(m.chat)}">{escape(m.chat.full_name)}</a>'
     elif text.startswith('/sing '):
         if text:
-            text = '♪~ ' + text
+            text = '♪~ ' + text[6:]
         suffix = ' ~♪'
     if m.media_group_id and m.is_forward():
         if m.forward_from_chat:
