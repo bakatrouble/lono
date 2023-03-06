@@ -24,10 +24,15 @@ def sign_text(m: Message):
         text = ''
     text = re.sub(r'</?tg-emoji.*?>', '', text)
     sign = ''
+    suffix = ' 🦝'
     if text.startswith('/sign'):
         if text:
             text = text[5:]
         sign = f'\n\n<a href="{build_link(m.chat)}">{escape(m.chat.full_name)}</a>'
+    elif text.startswith('/sing '):
+        if text:
+            text = '♪~ ' + text
+        suffix = ' ~♪'
     if m.media_group_id and m.is_forward():
         if m.forward_from_chat:
             sign += f'\n\nПереслано из <a href="{build_link(m.forward_from_chat)}">{m.forward_from_chat.full_name}</a>'
@@ -35,7 +40,7 @@ def sign_text(m: Message):
             sign += f'\n\nПереслано от <a href="{build_link(m.forward_from)}">{m.forward_from.full_name}</a>'
     if len(text + sign) > (MAX_MESSAGE_LENGTH if m.text else 1024):
         text = text[:-(len(sign) + 1)]
-    text = text + (' 🦝' if text else '') + sign
+    text = text + (suffix if text else '') + sign
     return text
 
 
