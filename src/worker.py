@@ -13,7 +13,7 @@ from aiogram.utils.parts import MAX_MESSAGE_LENGTH
 
 from src.defines import MANAGEMENT_CHAT, bot, mq
 from src.db import get_users, last_media, update_last_media, get_counter_by_mid, get_mid_by_counter, update_user, \
-    save_sent_mid, get_username, get_link, remove_user, increase_counter, antispam
+    save_sent_mid, get_username, get_link, remove_user, increase_counter, antispam, get_flag, set_flag
 from src.utils import build_link, notify_add_request
 
 
@@ -25,10 +25,10 @@ def sign_text(m: Message):
     text = re.sub(r'</?tg-emoji.*?>', '', text)
     sign = ''
     suffix = ' 🦝'
-    if text.startswith('/sign'):
-        if text:
-            text = text[5:]
+    if not text.startswith('/unsign'):
         sign = f'\n\n<a href="{build_link(m.chat)}">{escape(m.chat.full_name)}</a>'
+    elif text.startswith('/unsign'):
+        text = text[7:]
     elif text.startswith('/sing'):
         if text:
             text = '♪~' + text[5:]
@@ -69,6 +69,13 @@ async def process_message(m: Message):
 
     users = await validate_user(m)
     if not users:
+        return
+
+    if not await get_flag(m.chat.id, '1apr23'):
+        await m.reply('Сегодня твой день, енот! '
+                      'Сегодня все сообщения будут подписываться, если не начинать их с /unsign. '
+                      'Предупреждаю только один раз.')
+        await set_flag(m.chat.id, '1apr23', True)
         return
 
     text = sign_text(m)

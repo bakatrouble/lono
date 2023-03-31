@@ -78,3 +78,14 @@ async def antispam(args: List[any]):
     await redis.set(key, '1', ex=30)
     return True
 
+
+async def get_flag(uid: int, flag: str):
+    return bool(await redis.hget(f'lono:flags:{uid}', flag))
+
+
+async def set_flag(uid: int, flag: str, value: bool):
+    if value:
+        await redis.hset(f'lono:flags:{uid}', flag, '1')
+    else:
+        await redis.hdel(f'lono:flags:{uid}', flag)
+
