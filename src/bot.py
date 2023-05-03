@@ -25,7 +25,7 @@ async def stop_command(message: Message):
     await message.reply('Ну и уходи')
 
 
-@dp.message_handler(IDFilter(MANAGEMENT_CHAT), commands='add')
+@dp.message_handler(IDFilter(chat_id=MANAGEMENT_CHAT), commands='add')
 async def add_command(message: Message):
     args = message.get_args()
     if args:
@@ -56,7 +56,7 @@ async def add_callback(callback_query: CallbackQuery):
                                            parse_mode=ParseMode.HTML)
 
 
-@dp.message_handler(IDFilter(MANAGEMENT_CHAT), commands='remove')
+@dp.message_handler(IDFilter(chat_id=MANAGEMENT_CHAT), commands='remove')
 async def remove_command(message: Message):
     args = message.get_args()
     if args:
